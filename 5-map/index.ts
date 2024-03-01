@@ -18,7 +18,7 @@ class MyMap {
 	set(key: string, value: any): void {
 		const hash = this.hash(key);
 		const index = hash;
-		const newBucket: IBucket = { hash, key, value, };
+		const newBucket: IBucket = { hash, key, value };
 
 		if (!this.buckets[index]) {
 			this.buckets[index] = newBucket;
@@ -36,7 +36,6 @@ class MyMap {
 			}
 		}
 	}
-
 
 	get(key: string): any {
 		const index = this.hash(key);
@@ -74,21 +73,19 @@ class MyMap {
 	}
 
 	getBuckets(): (IBucket | undefined)[] {
-		return this.buckets;
+		return this.buckets.filter(bucket => bucket != undefined);
 	}
-
-
 }
 const map = new MyMap();
 
 map.set('London', '+25');
 map.set('ab', '+20');
 map.set('ba', '-10');
-console.log(map.getBuckets())
+console.log(map.getBuckets());
 console.log(map.get('Berlin'));
 console.log(map.get('London'));
 map.delete('Berlin');
 console.log(map.get('Berlin'));
 
 map.clear();
-console.log(map.getBuckets())
+console.log(map.getBuckets());

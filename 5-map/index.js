@@ -40,7 +40,7 @@ var MyMap = /** @class */ (function () {
         }
         return undefined;
     };
-    MyMap.prototype["delete"] = function (key) {
+    MyMap.prototype.delete = function (key) {
         var index = this.hash(key);
         var current = this.buckets[index];
         var prev = undefined;
@@ -62,7 +62,7 @@ var MyMap = /** @class */ (function () {
         this.buckets = new Array(this.buckets.length);
     };
     MyMap.prototype.getBuckets = function () {
-        return this.buckets;
+        return this.buckets.filter(function (bucket) { return bucket != undefined; });
     };
     return MyMap;
 }());
@@ -73,7 +73,7 @@ map.set('ba', '-10');
 console.log(map.getBuckets());
 console.log(map.get('Berlin'));
 console.log(map.get('London'));
-map["delete"]('Berlin');
+map.delete('Berlin');
 console.log(map.get('Berlin'));
 map.clear();
 console.log(map.getBuckets());
