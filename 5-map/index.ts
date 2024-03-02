@@ -1,12 +1,12 @@
-interface IBucket {
+interface IBucket<T> {
 	hash: number;
 	key: string;
-	value: any;
-	next?: IBucket;
+	value: T;
+	next?: IBucket<T>;
 }
 
-class MyMap {
-	private buckets: (IBucket | undefined)[] = new Array(10);
+class MyMap<T> {
+	private buckets: (IBucket<T> | undefined)[] = new Array(10);
 
 	private hash(key: string): number {
 		let hash = 0;
@@ -18,19 +18,19 @@ class MyMap {
 	set(key: string, value: any): void {
 		const hash = this.hash(key);
 		const index = hash;
-		const newBucket: IBucket = { hash, key, value };
+		const newBucket: IBucket<T> = { hash, key, value };
 
 		if (!this.buckets[index]) {
 			this.buckets[index] = newBucket;
 		} else {
-			let current: IBucket | undefined = this.buckets[index];
+			let currentBucket: IBucket<T> | undefined = this.buckets[index];
 
-			while (current?.next) {
-				current = current.next;
+			while (currentBucket?.next) {
+				currentBucket = currentBucket.next;
 			}
 
-			if (current) {
-				current.next = newBucket;
+			if (currentBucket) {
+				currentBucket.next = newBucket;
 			} else {
 				this.buckets[index] = newBucket;
 			}
@@ -39,40 +39,40 @@ class MyMap {
 
 	get(key: string): any {
 		const index = this.hash(key);
-		let current: IBucket | undefined = this.buckets[index];
+		let currentBucket: IBucket<T> | undefined = this.buckets[index];
 
-		while (current) {
-			if (current.key === key) {
-				return current.value;
+		while (currentBucket) {
+			if (currentBucket.key === key) {
+				return currentBucket.value;
 			}
-			current = current.next;
+			currentBucket = currentBucket.next;
 		}
 
 		return undefined;
 	}
 	delete(key: string): void {
 		const index = this.hash(key);
-		let current: IBucket | undefined = this.buckets[index];
-		let prev: IBucket | undefined = undefined;
+		let currentBucket: IBucket<T> | undefined = this.buckets[index];
+		let prevBucket: IBucket<T> | undefined = undefined;
 
-		while (current) {
-			if (current.key === key) {
-				if (prev) {
-					prev.next = current.next;
+		while (currentBucket) {
+			if (currentBucket.key === key) {
+				if (prevBucket) {
+					prevBucket.next = currentBucket.next;
 				} else {
-					this.buckets[index] = current.next;
+					this.buckets[index] = currentBucket.next;
 				}
 				return;
 			}
-			prev = current;
-			current = current.next;
+			prevBucket = currentBucket;
+			currentBucket = currentBucket.next;
 		}
 	}
 	clear(): void {
 		this.buckets = new Array(this.buckets.length);
 	}
 
-	getBuckets(): (IBucket | undefined)[] {
+	getBuckets(): (IBucket<T> | undefined)[] {
 		return this.buckets.filter(bucket => bucket != undefined);
 	}
 }
@@ -82,10 +82,11 @@ map.set('London', '+25');
 map.set('ab', '+20');
 map.set('ba', '-10');
 console.log(map.getBuckets());
-console.log(map.get('Berlin'));
 console.log(map.get('London'));
-map.delete('Berlin');
-console.log(map.get('Berlin'));
+console.log(map.get('ba'));
+console.log(map.get('ab'));
+map.delete('London');
+console.log(map.get('London'));
 
 map.clear();
 console.log(map.getBuckets());

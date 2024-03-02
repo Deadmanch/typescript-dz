@@ -17,12 +17,12 @@ var MyMap = /** @class */ (function () {
             this.buckets[index] = newBucket;
         }
         else {
-            var current = this.buckets[index];
-            while (current === null || current === void 0 ? void 0 : current.next) {
-                current = current.next;
+            var currentBucket = this.buckets[index];
+            while (currentBucket === null || currentBucket === void 0 ? void 0 : currentBucket.next) {
+                currentBucket = currentBucket.next;
             }
-            if (current) {
-                current.next = newBucket;
+            if (currentBucket) {
+                currentBucket.next = newBucket;
             }
             else {
                 this.buckets[index] = newBucket;
@@ -31,31 +31,31 @@ var MyMap = /** @class */ (function () {
     };
     MyMap.prototype.get = function (key) {
         var index = this.hash(key);
-        var current = this.buckets[index];
-        while (current) {
-            if (current.key === key) {
-                return current.value;
+        var currentBucket = this.buckets[index];
+        while (currentBucket) {
+            if (currentBucket.key === key) {
+                return currentBucket.value;
             }
-            current = current.next;
+            currentBucket = currentBucket.next;
         }
         return undefined;
     };
     MyMap.prototype.delete = function (key) {
         var index = this.hash(key);
-        var current = this.buckets[index];
-        var prev = undefined;
-        while (current) {
-            if (current.key === key) {
-                if (prev) {
-                    prev.next = current.next;
+        var currentBucket = this.buckets[index];
+        var prevBucket = undefined;
+        while (currentBucket) {
+            if (currentBucket.key === key) {
+                if (prevBucket) {
+                    prevBucket.next = currentBucket.next;
                 }
                 else {
-                    this.buckets[index] = current.next;
+                    this.buckets[index] = currentBucket.next;
                 }
                 return;
             }
-            prev = current;
-            current = current.next;
+            prevBucket = currentBucket;
+            currentBucket = currentBucket.next;
         }
     };
     MyMap.prototype.clear = function () {
@@ -71,9 +71,10 @@ map.set('London', '+25');
 map.set('ab', '+20');
 map.set('ba', '-10');
 console.log(map.getBuckets());
-console.log(map.get('Berlin'));
 console.log(map.get('London'));
-map.delete('Berlin');
-console.log(map.get('Berlin'));
+console.log(map.get('ba'));
+console.log(map.get('ab'));
+map.delete('London');
+console.log(map.get('London'));
 map.clear();
 console.log(map.getBuckets());
