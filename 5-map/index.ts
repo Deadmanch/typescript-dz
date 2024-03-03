@@ -37,7 +37,7 @@ class MyMap<T> {
 		}
 	}
 
-	get(key: string): any {
+	get(key: string): T | undefined {
 		const index = this.hash(key);
 		let currentBucket: IBucket<T> | undefined = this.buckets[index];
 
