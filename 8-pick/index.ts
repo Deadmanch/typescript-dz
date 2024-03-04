@@ -13,9 +13,9 @@ const user2: UserType = {
 	age: 28,
 	skills: ['typescript', 'javascript', 'html/css', 'node'],
 };
-
-const pickObjectKeys = <T, K extends keyof T>(obj: T, keys: K[]): { [key in K]: T[key] } => {
-	const pickedObj = {} as { [key in K]: T[key] };
+type PickedKeysType<T, K extends keyof T> = Partial<Record<K, T[K]>>;
+const pickObjectKeys = <T, K extends keyof T>(obj: T, keys: K[]): PickedKeysType<T, K> => {
+	const pickedObj: PickedKeysType<T, K> = {};
 
 	keys.forEach(key => {
 		pickedObj[key] = obj[key];
